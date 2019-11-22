@@ -1,8 +1,7 @@
 package main
 
 type Personaje struct {
-	energia      int
-	intPersonaje IPersonaje
+	energia int
 }
 
 type Anfitrion struct {
@@ -23,9 +22,12 @@ type Parque struct {
 
 type IPersonaje interface {
 	felicidad() int
-	interactuarConMuchos()
 	interactuar()
-	consecuenciasDeConocerEscenario()
+	consecuenciasDeConocerEscenario(e Escenario)
+}
+
+func felicidadDeUnPersonaje(i IPersonaje) int { // // implementacion de interfaz
+	return i.felicidad()
 }
 
 func (p Personaje) felicidad() int {
@@ -33,10 +35,10 @@ func (p Personaje) felicidad() int {
 }
 
 func (h Huesped) felicidad() int {
-	return h.minutosRestantes * felicidadDeAmigos(h)
+	return h.minutosRestantes * h.felicidadDeAmigos()
 }
 
-func felicidadDeAmigos(h Huesped) int {
+func (h Huesped) felicidadDeAmigos() int {
 	felicidadTotalDeAmigos := 0
 	amigues := h.amigos
 	for _, personaje := range amigues {
@@ -52,6 +54,10 @@ func (a Anfitrion) felicidad() int {
 
 func (p *Personaje) interactuar() {
 	(*p).energia = p.energia / 2
+}
+
+func interaccion(i IPersonaje) { // // implementacion de interfaz
+	i.interactuar()
 }
 
 func (a *Anfitrion) interactuar() {
@@ -87,9 +93,11 @@ func (h *Huesped) consecuenciasDeConocerEscenario(e Escenario) {
 	(*h).minutosRestantes = h.minutosRestantes - 10
 }
 
-func (p *Personaje) consecuenciasDeConocerEscenario(e Escenario) {
-
+func consecuencias(i IPersonaje, e Escenario) { // implementacion de interfaz
+	i.consecuenciasDeConocerEscenario(e)
 }
+
+func (p *Personaje) consecuenciasDeConocerEscenario(e Escenario) {}
 
 func (p *Personaje) conocerEscenario(e Escenario) {
 	(*p).energia = p.energia - e.fama()
