@@ -39,18 +39,18 @@ func (h Huesped) felicidad() int {
 func felicidadDeAmigos(h Huesped) int {
 	felicidadTotalDeAmigos := 0
 	amigues := h.amigos
-	for _, num := range amigues {
-		felicidadTotalDeAmigos += num.felicidad()
+	for _, personaje := range amigues {
+		felicidadTotalDeAmigos += personaje.felicidad()
 	}
 	return felicidadTotalDeAmigos
 }
 
-func (a Anfitrion) felicidad() int { // a es como el self
-	parque1 := Parque{factor: 10}
-	return a.personaje.energia / a.velocidadProcesamiento * parque1.factor
+func (a Anfitrion) felicidad() int {
+	unParque := Parque{factor: 10}
+	return a.personaje.energia / a.velocidadProcesamiento * unParque.factor
 }
 
-func (p *Personaje) interactuar() { // (p *Personaje)
+func (p *Personaje) interactuar() {
 	(*p).energia = p.energia / 2
 }
 
@@ -74,9 +74,9 @@ func (p Personaje) esRebelde() bool {
 }
 
 func (p Personaje) interactuarConMuchos(personajes []Personaje) {
-	/*for _, num := range personajes {
-		interactuar(num)
-	}*/
+	for _, personaje := range personajes {
+		personaje.interactuar()
+	}
 }
 
 func (a *Anfitrion) consecuenciasDeConocerEscenario(e Escenario) {

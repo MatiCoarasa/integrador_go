@@ -7,8 +7,8 @@ type Trama struct {
 
 func (t Trama) felicidadDePersonajes() int {
 	felicidadDePersonajes := 0
-	for _, num := range t.personajes {
-		felicidadDePersonajes += num.felicidad()
+	for _, personaje := range t.personajes {
+		felicidadDePersonajes += personaje.felicidad()
 	}
 	return felicidadDePersonajes
 }
@@ -19,7 +19,17 @@ func (t Trama) complejidad() int {
 
 func (t Trama) renovar() {
 	t.escenario.evolucionar()
-	//Filter
+	t.filtrarPersonajesDeTrama()
+}
+
+func (t *Trama) filtrarPersonajesDeTrama() {
+	var personajesRebeldes []Personaje
+	(*t).personajes = personajesRebeldes
+	for _, personaje := range t.personajes {
+		if personaje.esRebelde() {
+			personajesRebeldes = append(personajesRebeldes, personaje)
+		}
+	}
 }
 
 func (t Trama) cruzar(o Trama) {
@@ -28,17 +38,17 @@ func (t Trama) cruzar(o Trama) {
 }
 
 func (t Trama) personajesConocenEscenario(unEscenario Escenario) {
-	for _, num := range t.personajes {
-		num.conocerEscenario(unEscenario)
+	for _, personaje := range t.personajes {
+		personaje.conocerEscenario(unEscenario)
 	}
 }
 
 func (t Trama) cruzarPersonajes(o []Personaje) {
-	for _, num := range t.personajes {
-		//interactuarConMuchos(num, o)
+	for _, personaje := range t.personajes {
+		personaje.interactuarConMuchos(o)
 	}
 }
 
 func (t Trama) esAburrida() bool {
-	return t.complejidad < 10
+	return t.complejidad() < 10
 }

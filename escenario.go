@@ -61,7 +61,7 @@ func (e Estandar) aumentarVisitas() {
 }
 
 func (e Escenario) evolucion() {
-	e.categoria.evolucionar()
+	//e.categoria.evolucionar()
 }
 
 func (d DeLujo) extra() int {
