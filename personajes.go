@@ -1,17 +1,18 @@
 package main
 
 type Personaje struct {
-	energia int
+	energia      int
+	intPersonaje IPersonaje
 }
 
 type Anfitrion struct {
-	Personaje
+	personaje              Personaje
 	velocidadProcesamiento int
 	recuerdos              []Recuerdo
 }
 
 type Huesped struct {
-	Personaje
+	personaje        Personaje
 	minutosRestantes int
 	amigos           []Personaje
 }
@@ -20,14 +21,15 @@ type Parque struct {
 	factor int
 }
 
-type iPersonaje interface {
+type IPersonaje interface {
 	felicidad() int
 	interactuarConMuchos()
 	interactuar()
+	consecuenciasDeConocerEscenario()
 }
 
-func felicidad(p Personaje) int {
-	return felicidad(p)
+func (p Personaje) felicidad() int {
+	return p.felicidad()
 }
 
 func (h Huesped) felicidad() int {
@@ -35,51 +37,62 @@ func (h Huesped) felicidad() int {
 }
 
 func felicidadDeAmigos(h Huesped) int {
-	sum := 0
+	felicidadTotalDeAmigos := 0
 	amigues := h.amigos
 	for _, num := range amigues {
-		sum += felicidad(num)
+		felicidadTotalDeAmigos += num.felicidad()
 	}
-	return sum
+	return felicidadTotalDeAmigos
 }
 
 func (a Anfitrion) felicidad() int { // a es como el self
 	parque1 := Parque{factor: 10}
-	return a.energia / a.velocidadProcesamiento * parque1.factor
+	return a.personaje.energia / a.velocidadProcesamiento * parque1.factor
 }
 
 func (p *Personaje) interactuar() { // (p *Personaje)
-	p.energia = p.energia / 2
+	(*p).energia = p.energia / 2
 }
 
 func (a *Anfitrion) interactuar() {
-	a.energia = a.energia / 2
-	a.velocidadProcesamiento = a.velocidadProcesamiento / 2
+	(*a).personaje.energia = a.personaje.energia / 2
+	(*a).velocidadProcesamiento = a.velocidadProcesamiento / 2
 }
 
 func (h *Huesped) interactuar() {
-	h.energia = h.energia / 2
-	h.minutosRestantes = h.minutosRestantes - 10
+	(*h).personaje.energia = h.personaje.energia / 2
+	(*h).minutosRestantes = h.minutosRestantes - 10
 }
 
 func (p Personaje) rebeldia() int {
-	return 1 / felicidad(p)
+	return 1 / p.felicidad()
 }
 
-func interactuarConMuchos(personajes []Personaje) {
+func (p Personaje) esRebelde() bool {
+	return p.rebeldia() > 10
+
+}
+
+func (p Personaje) interactuarConMuchos(personajes []Personaje) {
 	/*for _, num := range personajes {
 		interactuar(num)
 	}*/
 }
 
-func consecuenciasDeConocerEscenario(a Anfitrion, e Escenario) {
-	a.recuerdos = append(a.recuerdos, Recuerdo{descripcion: "Conoci un escenario", escenario: e})
+func (a *Anfitrion) consecuenciasDeConocerEscenario(e Escenario) {
+	(*a).recuerdos = append(a.recuerdos, Recuerdo{descripcion: "Conoci un escenario", escenario: e})
 }
 
-func (h *Huesped) consecuenciasDeConocerEscenario() {
-	h.minutosRestantes = h.minutosRestantes - 10
+func (h *Huesped) consecuenciasDeConocerEscenario(e Escenario) {
+	(*h).minutosRestantes = h.minutosRestantes - 10
 }
 
-func conocerEscenario(p Personaje, e Escenario) {
-	p.energia = p.energia - fama(e) - consecuenciasDeConocerEscenario(p, e)
+func (p *Personaje) consecuenciasDeConocerEscenario(e Escenario) {
+
+}
+
+func (p *Personaje) conocerEscenario(e Escenario) {
+	(*p).energia = p.energia - e.fama()
+	p.consecuenciasDeConocerEscenario(e)
+	e.aumentarVisitas()
 }

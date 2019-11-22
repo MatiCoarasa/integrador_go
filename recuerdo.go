@@ -6,5 +6,5 @@ type Recuerdo struct {
 }
 
 func (r Recuerdo) emotividad() int {
-	return len(r.descripcion) //* fama(r.escenario)
+	return len(r.descripcion) * r.escenario.fama()
 }
