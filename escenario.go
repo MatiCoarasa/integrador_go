@@ -8,7 +8,7 @@ type Escenario struct {
 type ICategoria interface {
 	extra() int
 	aumentarVisitas()
-	evolucionar(es *Escenario)
+	evolucionar(es Escenario)
 	fama() int
 }
 
@@ -31,10 +31,6 @@ func (e Escenario) aumentarVisitas() {
 	e.categoria.aumentarVisitas()
 }
 
-func evolucion(i ICategoria, e *Escenario) {
-	i.evolucionar(e)
-}
-
 func (d DeLujo) fama() int {
 	return d.visitas
 }
@@ -47,7 +43,7 @@ func (e Estandar) fama() int {
 	return 10
 }
 
-func famaDeEscenario(i ICategoria) int {
+func famaDeCategoria(i ICategoria) int {
 	return i.fama()
 }
 
@@ -62,7 +58,7 @@ func (b BajoCoste) aumentarVisitas() {
 func (e Estandar) aumentarVisitas() {
 }
 
-func (e *Escenario) evolucion(i ICategoria) {
+func (e Escenario) evolucion(i ICategoria) {
 	i.evolucionar(e)
 }
 
@@ -78,14 +74,17 @@ func (e Estandar) extra() int {
 	return 10
 }
 
-func (d DeLujo) evolucionar(es *Escenario) /*error*/ {
+func extras(i ICategoria) int {
+	return i.extra()
+}
+func (d DeLujo) evolucionar(es Escenario) /*error*/ {
 	//return errors.New("esta categoria no puede evolucionar")
 }
 
-func (b BajoCoste) evolucionar(es *Escenario) {
-	(*es).categoria = new(Estandar)
+func (b BajoCoste) evolucionar(es Escenario) {
+	(es).categoria = Estandar{} // new(Estandar)
 }
 
-func (e Estandar) evolucionar(es *Escenario) {
-	(*es).categoria = new(DeLujo)
+func (e Estandar) evolucionar(es Escenario) {
+	(es).categoria = DeLujo{visitas: 5} //new(DeLujo)
 }

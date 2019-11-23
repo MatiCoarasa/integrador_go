@@ -52,22 +52,22 @@ func (a Anfitrion) felicidad() int {
 	return a.personaje.energia / a.velocidadProcesamiento * unParque.factor
 }
 
-func (p *Personaje) interactuar() {
-	(*p).energia = p.energia / 2
+func (p Personaje) interactuar() {
+	p.energia = p.energia / 2
 }
 
 func interaccion(i IPersonaje) { // // implementacion de interfaz
 	i.interactuar()
 }
 
-func (a *Anfitrion) interactuar() {
-	(*a).personaje.energia = a.personaje.energia / 2
-	(*a).velocidadProcesamiento = a.velocidadProcesamiento / 2
+func (a Anfitrion) interactuar() {
+	a.personaje.interactuar()
+	a.velocidadProcesamiento = a.velocidadProcesamiento / 2
 }
 
-func (h *Huesped) interactuar() {
-	(*h).personaje.energia = h.personaje.energia / 2
-	(*h).minutosRestantes = h.minutosRestantes - 10
+func (h Huesped) interactuar() {
+	h.personaje.interactuar()
+	h.minutosRestantes = h.minutosRestantes - 10
 }
 
 func (p Personaje) rebeldia() int {
@@ -85,22 +85,22 @@ func (p Personaje) interactuarConMuchos(personajes []Personaje) {
 	}
 }
 
-func (a *Anfitrion) consecuenciasDeConocerEscenario(e Escenario) {
-	(*a).recuerdos = append(a.recuerdos, Recuerdo{descripcion: "Conoci un escenario", escenario: e})
+func (a Anfitrion) consecuenciasDeConocerEscenario(e Escenario) {
+	a.recuerdos = append(a.recuerdos, Recuerdo{descripcion: "Conoci un escenario", escenario: e})
 }
 
-func (h *Huesped) consecuenciasDeConocerEscenario(e Escenario) {
-	(*h).minutosRestantes = h.minutosRestantes - 10
+func (h Huesped) consecuenciasDeConocerEscenario(e Escenario) {
+	h.minutosRestantes = h.minutosRestantes - 10
 }
 
 func consecuencias(i IPersonaje, e Escenario) { // implementacion de interfaz
 	i.consecuenciasDeConocerEscenario(e)
 }
 
-func (p *Personaje) consecuenciasDeConocerEscenario(e Escenario) {}
+func (p Personaje) consecuenciasDeConocerEscenario(e Escenario) {}
 
-func (p *Personaje) conocerEscenario(e Escenario) {
-	(*p).energia = p.energia - e.fama()
+func (p Personaje) conocerEscenario(e Escenario) {
+	p.energia = p.energia - e.fama()
 	p.consecuenciasDeConocerEscenario(e)
 	e.aumentarVisitas()
 }
