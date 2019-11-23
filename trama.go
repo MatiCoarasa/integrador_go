@@ -18,7 +18,7 @@ func (t Trama) complejidad() int {
 }
 
 func (t Trama) renovar() {
-	t.escenario.evolucionar()
+	t.escenario.evolucion(t.escenario.categoria)
 	t.filtrarPersonajesDeTrama()
 }
 
