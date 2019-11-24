@@ -16,7 +16,7 @@ func main() {
 	unRecuerdo := Recuerdo{descripcion: "Viaje", escenario: unEscenario}
 	fmt.Println(unRecuerdo.emotividad())
 
-	tomas := Anfitrion{personaje: Personaje{energia: 20}, velocidadProcesamiento: 5, recuerdos: []Recuerdo{unRecuerdo}}
+	tomas := Anfitrion{Personaje: Personaje{3}, velocidadProcesamiento: 5, recuerdos: []Recuerdo{unRecuerdo}}
 	fmt.Println(tomas)
 
 	fmt.Println(felicidadDeUnPersonaje(&tomas))
@@ -25,17 +25,17 @@ func main() {
 
 	unEscenario.consecuencias(&tomas)
 	fmt.Println(tomas)
-	tomas.personaje.conocerEscenario(unEscenario)
+	tomas.conocerEscenario(unEscenario)
 	fmt.Println(tomas)
 
-	unaTrama := Trama{personajes: []Personaje{tomas.personaje}, escenario: unEscenario}
+	unaTrama := Trama{personajes: []Personaje{tomas.Personaje}, escenario: unEscenario}
 	fmt.Println(unaTrama)
 	unaTrama.renovar()
 	fmt.Println(unaTrama)
 
-	nicolas := Huesped{personaje: Personaje{energia: 15}, minutosRestantes: 10, amigos: []Personaje{tomas.personaje, tomas.personaje}}
+	nicolas := Huesped{Personaje: Personaje{15}, minutosRestantes: 10, amigos: []Personaje{tomas.Personaje, tomas.Personaje}}
 	fmt.Println(nicolas)
 
 	fmt.Println(felicidadDeUnPersonaje(&nicolas))
-	fmt.Println(tomas.personaje.esRebelde())
+	fmt.Println(tomas.Personaje.esRebelde())
 }

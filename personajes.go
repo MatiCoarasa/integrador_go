@@ -5,13 +5,13 @@ type Personaje struct {
 }
 
 type Anfitrion struct {
-	personaje              Personaje
+	Personaje
 	velocidadProcesamiento int
 	recuerdos              []Recuerdo
 }
 
 type Huesped struct {
-	personaje        Personaje
+	Personaje
 	minutosRestantes int
 	amigos           []Personaje
 }
@@ -26,12 +26,12 @@ type IPersonaje interface {
 	consecuenciasDeConocerEscenario(e Escenario)
 }
 
-func felicidadDeUnPersonaje(i IPersonaje) int { // implementacion de interfaz
+/*func felicidadDeUnPersonaje(i IPersonaje) int { // implementacion de interfaz
 	return i.felicidad()
-}
+}*/
 
-func (p Personaje) felicidad() int {
-	return 1
+func felicidadPersonaje(i IPersonaje) int {
+	return i.felicidad()
 }
 
 func (h Huesped) felicidad() int {
@@ -41,15 +41,15 @@ func (h Huesped) felicidad() int {
 func (h Huesped) felicidadDeAmigos() int {
 	felicidadTotalDeAmigos := 0
 	amigosDelPersonaje := h.amigos
-	for _, personaje := range amigosDelPersonaje {
-		felicidadTotalDeAmigos += felicidadDeUnPersonaje(&personaje)
+	for _, IPersonaje := range amigosDelPersonaje {
+		felicidadTotalDeAmigos += felicidadPersonaje(&IPersonaje)
 	}
 	return felicidadTotalDeAmigos
 }
 
 func (a Anfitrion) felicidad() int {
 	unParque := Parque{factor: 10}
-	return a.personaje.energia / a.velocidadProcesamiento * unParque.factor
+	return a.energia / a.velocidadProcesamiento * unParque.factor
 }
 
 func (p *Personaje) interactuar() {
@@ -61,12 +61,12 @@ func interaccion(i IPersonaje) { // implementacion de interfaz
 }
 
 func (a *Anfitrion) interactuar() {
-	(*a).personaje.interactuar()
+	(*a).Personaje.interactuar()
 	(*a).velocidadProcesamiento = a.velocidadProcesamiento / 2
 }
 
 func (h *Huesped) interactuar() {
-	(*h).personaje.interactuar()
+	(*h).Personaje.interactuar()
 	(*h).minutosRestantes = h.minutosRestantes - 10
 }
 

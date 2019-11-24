@@ -1,5 +1,7 @@
 package main
 
+import "errors"
+
 type Escenario struct {
 	nombre    string
 	categoria ICategoria
@@ -8,7 +10,7 @@ type Escenario struct {
 type ICategoria interface {
 	extra() int
 	aumentarVisitas()
-	evolucionar(es *Escenario)
+	evolucionar(es *Escenario) error
 	fama() int
 }
 
@@ -24,7 +26,11 @@ type DeLujo struct {
 }
 
 func (e Escenario) fama() int {
-	return 100 + e.categoria.extra()
+	return 100 + e.obtenerExtraDeCategoria()
+}
+
+func (e Escenario) obtenerExtraDeCategoria() int {
+	return e.categoria.extra()
 }
 
 func (e Escenario) aumentarVisitas() {
@@ -77,14 +83,17 @@ func (e *Escenario) evolucion(i ICategoria) {
 func extras(i ICategoria) int {
 	return i.extra()
 }
-func (d DeLujo) evolucionar(es *Escenario) /*error*/ {
-	//return errors.New("esta categoria no puede evolucionar")
+
+func (d DeLujo) evolucionar(es *Escenario) error {
+	return errors.New("esta categoria no puede evolucionar")
 }
 
-func (b BajoCoste) evolucionar(es *Escenario) {
-	(*es).categoria = Estandar{} // new(Estandar)
+func (b BajoCoste) evolucionar(es *Escenario) error {
+	(*es).categoria = *new(Estandar)
+	return nil
 }
 
-func (e Estandar) evolucionar(es *Escenario) {
-	(*es).categoria = DeLujo{visitas: 5} //new(DeLujo)
+func (e Estandar) evolucionar(es *Escenario) error {
+	(*es).categoria = *new(DeLujo)
+	return nil
 }

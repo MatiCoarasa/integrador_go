@@ -24,6 +24,7 @@ func (t Trama) renovar() {
 
 func (t *Trama) filtrarPersonajesDeTrama() {
 	var personajesRebeldes []Personaje
+
 	(*t).personajes = personajesRebeldes
 	for _, personaje := range t.personajes {
 		if personaje.esRebelde() {
