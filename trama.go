@@ -8,7 +8,7 @@ type Trama struct {
 func (t Trama) felicidadDePersonajes() int {
 	felicidadDePersonajes := 0
 	for _, personaje := range t.personajes {
-		felicidadDePersonajes += personaje.felicidad()
+		felicidadDePersonajes += felicidadDeUnPersonaje(&personaje)
 	}
 	return felicidadDePersonajes
 }

@@ -26,12 +26,12 @@ type IPersonaje interface {
 	consecuenciasDeConocerEscenario(e Escenario)
 }
 
-func felicidadDeUnPersonaje(i IPersonaje) int { // // implementacion de interfaz
+func felicidadDeUnPersonaje(i IPersonaje) int { // implementacion de interfaz
 	return i.felicidad()
 }
 
 func (p Personaje) felicidad() int {
-	return p.felicidad()
+	return 1
 }
 
 func (h Huesped) felicidad() int {
@@ -40,9 +40,9 @@ func (h Huesped) felicidad() int {
 
 func (h Huesped) felicidadDeAmigos() int {
 	felicidadTotalDeAmigos := 0
-	amigues := h.amigos
-	for _, personaje := range amigues {
-		felicidadTotalDeAmigos += personaje.felicidad()
+	amigosDelPersonaje := h.amigos
+	for _, personaje := range amigosDelPersonaje {
+		felicidadTotalDeAmigos += felicidadDeUnPersonaje(&personaje)
 	}
 	return felicidadTotalDeAmigos
 }
@@ -52,26 +52,26 @@ func (a Anfitrion) felicidad() int {
 	return a.personaje.energia / a.velocidadProcesamiento * unParque.factor
 }
 
-func (p Personaje) interactuar() {
-	p.energia = p.energia / 2
+func (p *Personaje) interactuar() {
+	(*p).energia = p.energia / 2
 }
 
-func interaccion(i IPersonaje) { // // implementacion de interfaz
+func interaccion(i IPersonaje) { // implementacion de interfaz
 	i.interactuar()
 }
 
-func (a Anfitrion) interactuar() {
-	a.personaje.interactuar()
-	a.velocidadProcesamiento = a.velocidadProcesamiento / 2
+func (a *Anfitrion) interactuar() {
+	(*a).personaje.interactuar()
+	(*a).velocidadProcesamiento = a.velocidadProcesamiento / 2
 }
 
-func (h Huesped) interactuar() {
-	h.personaje.interactuar()
-	h.minutosRestantes = h.minutosRestantes - 10
+func (h *Huesped) interactuar() {
+	(*h).personaje.interactuar()
+	(*h).minutosRestantes = h.minutosRestantes - 10
 }
 
 func (p Personaje) rebeldia() int {
-	return 1 / p.felicidad()
+	return 1 / felicidadDeUnPersonaje(&p)
 }
 
 func (p Personaje) esRebelde() bool {
@@ -85,22 +85,22 @@ func (p Personaje) interactuarConMuchos(personajes []Personaje) {
 	}
 }
 
-func (a Anfitrion) consecuenciasDeConocerEscenario(e Escenario) {
-	a.recuerdos = append(a.recuerdos, Recuerdo{descripcion: "Conoci un escenario", escenario: e})
+func (a *Anfitrion) consecuenciasDeConocerEscenario(e Escenario) {
+	(*a).recuerdos = append(a.recuerdos, Recuerdo{descripcion: "Conoci un escenario", escenario: e})
 }
 
-func (h Huesped) consecuenciasDeConocerEscenario(e Escenario) {
-	h.minutosRestantes = h.minutosRestantes - 10
+func (h *Huesped) consecuenciasDeConocerEscenario(e Escenario) {
+	(*h).minutosRestantes = h.minutosRestantes - 10
 }
 
-func consecuencias(i IPersonaje, e Escenario) { // implementacion de interfaz
+func (e Escenario) consecuencias(i IPersonaje) { // implementacion de interfaz
 	i.consecuenciasDeConocerEscenario(e)
 }
 
-func (p Personaje) consecuenciasDeConocerEscenario(e Escenario) {}
+func (p *Personaje) consecuenciasDeConocerEscenario(e Escenario) {}
 
-func (p Personaje) conocerEscenario(e Escenario) {
-	p.energia = p.energia - e.fama()
+func (p *Personaje) conocerEscenario(e Escenario) {
+	(*p).energia = p.energia - e.fama()
 	p.consecuenciasDeConocerEscenario(e)
 	e.aumentarVisitas()
 }
