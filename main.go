@@ -33,9 +33,15 @@ func main() {
 	unaTrama.renovar()
 	fmt.Println(unaTrama)
 
-	nicolas := Huesped{Personaje: Personaje{15}, minutosRestantes: 10, amigos: []Personaje{tomas.Personaje, tomas.Personaje}}
+	nicolas := Huesped{Personaje: Personaje{15}, minutosRestantes: 10, amigos: []IPersonaje{&tomas}}
 	fmt.Println(nicolas)
 
 	fmt.Println(felicidadDeUnPersonaje(&nicolas))
-	fmt.Println(tomas.Personaje.esRebelde())
+	fmt.Println(esRebelde(&tomas))
+
+	otroEscenario := Escenario{nombre: "EscenarioDeLujo", categoria: DeLujo{visitas: 7}}
+	fmt.Println(otroEscenario)
+	otroEscenario.evolucion(otroEscenario.categoria)
+	fmt.Println(otroEscenario)
+
 }

@@ -1,14 +1,14 @@
 package main
 
 type Trama struct {
-	personajes []Personaje
+	personajes []IPersonaje
 	escenario  Escenario
 }
 
 func (t Trama) felicidadDePersonajes() int {
 	felicidadDePersonajes := 0
 	for _, personaje := range t.personajes {
-		felicidadDePersonajes += felicidadDeUnPersonaje(&personaje)
+		felicidadDePersonajes += felicidadDeUnPersonaje(personaje)
 	}
 	return felicidadDePersonajes
 }
@@ -23,11 +23,11 @@ func (t Trama) renovar() {
 }
 
 func (t *Trama) filtrarPersonajesDeTrama() {
-	var personajesRebeldes []Personaje
+	var personajesRebeldes []IPersonaje
 
 	(*t).personajes = personajesRebeldes
 	for _, personaje := range t.personajes {
-		if personaje.esRebelde() {
+		if esRebelde(personaje) {
 			personajesRebeldes = append(personajesRebeldes, personaje)
 		}
 	}
@@ -40,11 +40,11 @@ func (t Trama) cruzar(o Trama) {
 
 func (t Trama) personajesConocenEscenario(unEscenario Escenario) {
 	for _, personaje := range t.personajes {
-		personaje.conocerEscenario(unEscenario)
+		conocerEscenario(personaje, unEscenario)
 	}
 }
 
-func (t Trama) cruzarPersonajes(o []Personaje) {
+func (t Trama) cruzarPersonajes(o []IPersonaje) {
 	for _, personaje := range t.personajes {
 		personaje.interactuarConMuchos(o)
 	}

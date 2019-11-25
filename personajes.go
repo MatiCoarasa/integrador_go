@@ -1,5 +1,7 @@
 package main
 
+//Problema: el lenguaje permite utilizar interfaces para los métodos o composición para simular la herencia (el estado), lo que necesitamos es una combinación de ambos.
+
 type Personaje struct {
 	energia int
 }
@@ -13,7 +15,7 @@ type Anfitrion struct {
 type Huesped struct {
 	Personaje
 	minutosRestantes int
-	amigos           []Personaje
+	amigos           []IPersonaje
 }
 
 type Parque struct {
@@ -21,16 +23,26 @@ type Parque struct {
 }
 
 type IPersonaje interface {
+	sumarEnergia(cantidad int)
 	felicidad() int
 	interactuar()
 	consecuenciasDeConocerEscenario(e Escenario)
+	//(p Personaje) interactuarConMuchos()
 }
 
-/*func felicidadDeUnPersonaje(i IPersonaje) int { // implementacion de interfaz
-	return i.felicidad()
-}*/
+func (h *Huesped) sumarEnergia(unaCantidad int) {
+	(*h).energia = h.energia - unaCantidad
+}
 
-func felicidadPersonaje(i IPersonaje) int {
+func (a *Anfitrion) sumarEnergia(unaCantidad int) {
+	(*a).energia = a.energia - unaCantidad
+}
+
+func sumarEnergiaDeUnPersonaje(i IPersonaje, unaEnergia int) {
+	i.sumarEnergia(unaEnergia)
+}
+
+func felicidadDeUnPersonaje(i IPersonaje) int {
 	return i.felicidad()
 }
 
@@ -42,7 +54,7 @@ func (h Huesped) felicidadDeAmigos() int {
 	felicidadTotalDeAmigos := 0
 	amigosDelPersonaje := h.amigos
 	for _, IPersonaje := range amigosDelPersonaje {
-		felicidadTotalDeAmigos += felicidadPersonaje(&IPersonaje)
+		felicidadTotalDeAmigos += felicidadDeUnPersonaje(IPersonaje)
 	}
 	return felicidadTotalDeAmigos
 }
@@ -70,16 +82,16 @@ func (h *Huesped) interactuar() {
 	(*h).minutosRestantes = h.minutosRestantes - 10
 }
 
-func (p Personaje) rebeldia() int {
-	return 1 / felicidadDeUnPersonaje(&p)
+func rebeldia(p IPersonaje) int {
+	return 1 / felicidadDeUnPersonaje(p)
 }
 
-func (p Personaje) esRebelde() bool {
-	return p.rebeldia() > 10
+func esRebelde(p IPersonaje) bool {
+	return rebeldia(p) > 10
 
 }
 
-func (p Personaje) interactuarConMuchos(personajes []Personaje) {
+func (p Personaje) interactuarConMuchos(personajes []IPersonaje) {
 	for _, personaje := range personajes {
 		personaje.interactuar()
 	}
@@ -99,8 +111,8 @@ func (e Escenario) consecuencias(i IPersonaje) { // implementacion de interfaz
 
 func (p *Personaje) consecuenciasDeConocerEscenario(e Escenario) {}
 
-func (p *Personaje) conocerEscenario(e Escenario) {
-	(*p).energia = p.energia - e.fama()
+func conocerEscenario(p IPersonaje, e Escenario) {
+	sumarEnergiaDeUnPersonaje(p, -e.fama())
 	p.consecuenciasDeConocerEscenario(e)
 	e.aumentarVisitas()
 }
