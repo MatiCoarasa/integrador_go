@@ -46,7 +46,7 @@ func (t Trama) personajesConocenEscenario(unEscenario Escenario) {
 
 func (t Trama) cruzarPersonajes(o []IPersonaje) {
 	for _, personaje := range t.personajes {
-		personaje.interactuarConMuchos(o)
+		interaccionTotal(personaje, o)
 	}
 }
 

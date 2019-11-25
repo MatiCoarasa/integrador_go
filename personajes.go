@@ -27,7 +27,7 @@ type IPersonaje interface {
 	felicidad() int
 	interactuar()
 	consecuenciasDeConocerEscenario(e Escenario)
-	//(p Personaje) interactuarConMuchos()
+	interactuarConMuchos(personajes []IPersonaje)
 }
 
 func (h *Huesped) sumarEnergia(unaCantidad int) {
@@ -68,7 +68,7 @@ func (p *Personaje) interactuar() {
 	(*p).energia = p.energia / 2
 }
 
-func interaccion(i IPersonaje) { // implementacion de interfaz
+func interaccion(i IPersonaje) {
 	i.interactuar()
 }
 
@@ -91,10 +91,20 @@ func esRebelde(p IPersonaje) bool {
 
 }
 
-func (p Personaje) interactuarConMuchos(personajes []IPersonaje) {
+func (a Anfitrion) interactuarConMuchos(personajes []IPersonaje) {
 	for _, personaje := range personajes {
 		personaje.interactuar()
 	}
+}
+
+func (h Huesped) interactuarConMuchos(personajes []IPersonaje) {
+	for _, personaje := range personajes {
+		personaje.interactuar()
+	}
+}
+
+func interaccionTotal(i IPersonaje, personajes []IPersonaje) {
+	i.interactuarConMuchos(personajes)
 }
 
 func (a *Anfitrion) consecuenciasDeConocerEscenario(e Escenario) {
@@ -105,7 +115,7 @@ func (h *Huesped) consecuenciasDeConocerEscenario(e Escenario) {
 	(*h).minutosRestantes = h.minutosRestantes - 10
 }
 
-func (e Escenario) consecuencias(i IPersonaje) { // implementacion de interfaz
+func (e Escenario) consecuencias(i IPersonaje) {
 	i.consecuenciasDeConocerEscenario(e)
 }
 
